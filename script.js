@@ -5,14 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentScore = 0;
     const currentScoreElem = document.getElementById('current-score');
 
-    // Get the high score from local storage or set it to 0 if not found
+    // Получаем наивысший счёт или присваем 0, если не найдено
     let highScore = localStorage.getItem('2048-highScore') || 0;
     const highScoreElem = document.getElementById('high-score');
     highScoreElem.textContent = highScore;
 
     const gameOverElem = document.getElementById('game-over');
 
-    // Function to update the score
+    // Функция для обновления счёта 
     function updateScore(value) {
         currentScore += value;
         currentScoreElem.textContent = currentScore;
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Function to restart the game
+    // Рестарт игры
     function restartGame() {
         currentScore = 0;
         currentScoreElem.textContent = '0';
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         initializeGame();
     }
 
-    // Function to initialize the game
+    // Для инициализации игры
     function initializeGame() {
         board = [...Array(size)].map(e => Array(size).fill(0));
         placeRandom();
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderBoard();
     }
 
-    // Function to render the game board on the UI
+    // Для рендера игровой зоны в UI
     function renderBoard() {
         for (let i = 0; i < size; i++) {
             for (let j = 0; j < size; j++) {
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Cleanup animation classes
+        // Очистка классов анимаций
         setTimeout(() => {
             const cells = document.querySelectorAll('.grid-cell');
             cells.forEach(cell => {
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 300);
     }
 
-    // Function to place a random tile on the board
+    // Для размещения случайного знач на игровой зоне
     function placeRandom() {
         const available = [];
         for (let i = 0; i < size; i++) {
@@ -85,11 +85,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const randomCell = available[Math.floor(Math.random() * available.length)];
             board[randomCell.x][randomCell.y] = Math.random() < 0.9 ? 2 : 4;
             const cell = document.querySelector(`[data-row="${randomCell.x}"][data-col="${randomCell.y}"]`);
-            cell.classList.add('new-tile'); // Animation for new tiles
+            cell.classList.add('new-tile'); // Анимация для новых клеток/элементов
         }
     }
 
-    // Function to move the tiles based on arrow key input
+    // Функция для перемещения клеток в завис. от нажатия стрелок
     function move(direction) {
         let hasChanged = false;
         if (direction === 'ArrowUp' || direction === 'ArrowDown') {
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Function to transform a line (row or column) based on move direction
+    // Трансформирование линии в завис. от перемещения стрелками
     function transform(line, moveTowardsStart) {
         let newLine = line.filter(cell => cell !== 0);
         if (!moveTowardsStart) {
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < newLine.length - 1; i++) {
             if (newLine[i] === newLine[i + 1]) {
                 newLine[i] *= 2;
-                updateScore(newLine[i]); // Update score when tiles merged
+                updateScore(newLine[i]); // Обновление счёта, когда клетки объеден.
                 newLine.splice(i + 1, 1);
             }
         }
@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return newLine;
     }
 
-    // Function to check if the game is over
+    // Функция проверки завершения игры (проигрыша)
     function checkGameOver() {
         for (let i = 0; i < size; i++) {
             for (let j = 0; j < size; j++) {
@@ -158,11 +158,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // If we reach here, no moves are possible
+        // Если доходим до этого, движение не возможно
         gameOverElem.style.display = 'flex';
     }
 
-    // Event listeners
+    // Прослушиватели событий (event listeners)
     document.addEventListener('keydown', event => {
         if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
             move(event.key);
